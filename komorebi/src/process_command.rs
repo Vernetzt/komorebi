@@ -1798,6 +1798,12 @@ impl WindowManager {
             SocketMessage::ToggleMouseFollowsFocus => {
                 self.mouse_follows_focus = !self.mouse_follows_focus;
             }
+            SocketMessage::CenterFloating(enable) => {
+                self.center_floating = enable;
+            }
+            SocketMessage::ToggleCenterFloating => {
+                self.center_floating = !self.center_floating
+            }
             SocketMessage::ResizeDelta(delta) => {
                 self.resize_delta = delta;
             }

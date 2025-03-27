@@ -123,6 +123,7 @@ pub struct WindowManager {
     pub uncloack_to_ignore: usize,
     /// Maps each known window hwnd to the (monitor, workspace) index pair managing it
     pub known_hwnds: HashMap<isize, (usize, usize)>,
+    pub center_floating: bool,
 }
 
 #[allow(clippy::struct_excessive_bools)]
@@ -141,6 +142,7 @@ pub struct State {
     pub focus_follows_mouse: Option<FocusFollowsMouseImplementation>,
     pub mouse_follows_focus: bool,
     pub has_pending_raise_op: bool,
+    pub center_floating: bool,
 }
 
 impl State {
@@ -180,6 +182,10 @@ impl State {
         }
 
         if self.mouse_follows_focus != new.mouse_follows_focus {
+            return true;
+        }
+
+        if self.center_floating != new.center_floating {
             return true;
         }
 
@@ -370,6 +376,7 @@ impl From<&WindowManager> for State {
             mouse_follows_focus: wm.mouse_follows_focus,
             has_pending_raise_op: wm.has_pending_raise_op,
             unmanaged_window_operation_behaviour: wm.unmanaged_window_operation_behaviour,
+            center_floating: wm.center_floating,
         }
     }
 }
@@ -442,6 +449,7 @@ impl WindowManager {
             already_moved_window_handles: Arc::new(Mutex::new(HashSet::new())),
             uncloack_to_ignore: 0,
             known_hwnds: HashMap::new(),
+            center_floating: true,
         })
     }
 
