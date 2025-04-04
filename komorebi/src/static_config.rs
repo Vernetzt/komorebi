@@ -526,6 +526,10 @@ pub struct StaticConfig {
     /// Aspect ratio to resize with when toggling floating mode for a window
     #[serde(skip_serializing_if = "Option::is_none")]
     pub floating_window_aspect_ratio: Option<AspectRatio>,
+    /// Center and resize floating applications
+    /// (default: true)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub center_floating: Option<bool>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
@@ -872,6 +876,7 @@ impl From<&WindowManager> for StaticConfig {
             bar_configurations: None,
             remove_titlebar_applications: Option::from(NO_TITLEBAR.lock().clone()),
             floating_window_aspect_ratio: Option::from(*FLOATING_WINDOW_TOGGLE_ASPECT_RATIO.lock()),
+            center_floating: Option::from(value.center_floating),
         }
     }
 }
@@ -1272,6 +1277,7 @@ impl StaticConfig {
             already_moved_window_handles: Arc::new(Mutex::new(HashSet::new())),
             uncloack_to_ignore: 0,
             known_hwnds: HashMap::new(),
+            center_floating: value.center_floating.unwrap_or(true),
         };
 
         match value.focus_follows_mouse {
@@ -1665,6 +1671,10 @@ impl StaticConfig {
 
         if let Some(val) = value.mouse_follows_focus {
             wm.mouse_follows_focus = val;
+        }
+
+        if let Some(val) = value.center_floating {
+            wm.center_floating = val;
         }
 
         wm.work_area_offset = value.global_work_area_offset;

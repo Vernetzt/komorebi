@@ -350,6 +350,7 @@ impl WindowManager {
                             focused_monitor_idx,
                             focused_workspace_idx,
                         );
+                        let center_floating = self.center_floating;
                         let workspace = self.focused_workspace_mut()?;
                         let workspace_contains_window = workspace.contains_window(window.hwnd);
                         let monocle_container = workspace.monocle_container().clone();
@@ -387,7 +388,8 @@ impl WindowManager {
                                 let center_spawned_floats =
                                     matches!(workspace.layer, WorkspaceLayer::Floating)
                                         && !should_float
-                                        && workspace.tile;
+                                        && workspace.tile
+                                        && center_floating;
                                 workspace.floating_windows_mut().push_back(window);
                                 workspace.set_layer(WorkspaceLayer::Floating);
                                 if center_spawned_floats {

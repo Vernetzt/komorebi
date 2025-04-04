@@ -2025,6 +2025,10 @@
       "description": "Enable or disable mouse follows focus (default: true)",
       "type": "boolean"
     },
+    "center_floating": {
+      "description": "Enable or disable the centering of floating applications (default: true)",
+      "type": "boolean"
+    },
     "object_name_change_applications": {
       "description": "Identify applications that send EVENT_OBJECT_NAMECHANGE on launch (very rare)",
       "type": "array",
